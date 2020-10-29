@@ -105,11 +105,9 @@ public class Collections {
     }
 
     public static void mutableFilterEvenIndices(List<String> a) {
-        List<String> res = new ArrayList<>();
-        for (int i = 0; i < a.size(); i++)
-            if (i % 2 == 0)
-                res.add(a.get(i));
-        a.removeAll(res);
+        for (int i = a.size() - 1; i >= 0; i=i-2) {
+            a.remove(i);
+        }
     }
 
 
@@ -134,10 +132,10 @@ public class Collections {
 
     public static void mutableFilterEven(List<String> a) {
         List<String> res = new ArrayList<>();
-        for (int i = 0; i < a.size(); i++)
-            if (isNumber(a.get(i)))
-                if (Integer.parseInt(a.get(i)) % 2 == 0)
-                    res.add(a.get(i));
+        for (String s : a)
+            if (isNumber(s))
+                if (Integer.parseInt(s) % 2 == 0)
+                    res.add(s);
             a.removeAll(res);
     }
 
@@ -150,7 +148,11 @@ public class Collections {
     }
 
     public static void mutableFilterEven2(List<Integer> a) {
-        a.removeIf(x -> x % 2 == 0);
+        List<Integer> res = new ArrayList<>();
+        for (Integer i : a)
+            if (i % 2 == 0)
+                res.add(i);
+        a.removeAll(res);
     }
 
     public static void doReadWordsInFile(String s) throws IOException {
@@ -160,10 +162,12 @@ public class Collections {
         File f = new File(s);
         try (Scanner in = new Scanner(f, StandardCharsets.UTF_8)) {
             while (in.hasNext()) {
-                String word = in.next().toLowerCase().replaceAll("[^а-я—А-Яa-zA-Z0-9-\\s]", "");
+                String word = in.next().toLowerCase().replaceAll("[^а-яa-z0-9]", "");
+                if (word.length() != 0) {
                     hashSet.add(word);
                     linkedHashSet.add(word);
                     treeSet.add(word);
+                }
             }
         }
         System.out.println("HashSet:");
