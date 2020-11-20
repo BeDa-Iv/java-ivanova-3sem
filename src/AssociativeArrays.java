@@ -1,12 +1,19 @@
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class AssociativeArrays {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         System.out.println(transliteration("История"));
+        transliterateFile("rus.txt", "eng.txt");
         System.out.println(charCounter("Environment"));
         System.out.println(charIndexCounter("Environment"));
-
+        frequencyMap("rus.txt");
     }
 
     private static Map<Character, String> createTransliterationTable() {
@@ -34,6 +41,26 @@ public class AssociativeArrays {
             }
         }
         return result.toString();
+    }
+
+    public static void transliterateFile(String in, String out) throws IOException {
+        Pattern p = Pattern.compile("[А-Яа-я]+");
+        try (Scanner reader = new Scanner(new File(in), StandardCharsets.UTF_8);
+             PrintStream writer = new PrintStream(new File(out), StandardCharsets.UTF_8)) {
+            while (reader.hasNext()) {
+                String[] words = reader.nextLine().split("\\s+");
+                for (String word : words) {
+                    Matcher m = p.matcher(word);
+                    StringBuilder sb = new StringBuilder();
+                    while (m.find()) {
+                        m.appendReplacement(sb, transliteration(m.group()));
+                    }
+                    m.appendTail(sb);
+                    writer.print(sb + " ");
+                }
+                writer.append(System.lineSeparator());
+            }
+        }
     }
 
     private static Map<Character, Integer> charCounter(String s) {
@@ -64,6 +91,26 @@ public class AssociativeArrays {
             }
         }
         return countIndex;
+    }
+
+    public static void frequencyMap(String s) throws IOException {
+        Map<String, Integer> dictionary1 = new HashMap<>();
+        Map<String, Integer> dictionary2 = new TreeMap<>();
+        Map<String, Integer> dictionary3 = new LinkedHashMap<>();
+        frequency(dictionary1, s);
+        frequency(dictionary2, s);
+        frequency(dictionary3, s);
+    }
+
+    private static void frequency(Map<String, Integer> dictionary, String filename) throws IOException {
+        File f = new File(filename);
+        try (Scanner in = new Scanner(f, StandardCharsets.UTF_8).useDelimiter("[«»—.,:;()?!\\s]+")) {
+            while (in.hasNext()) {
+                String word = in.next().toLowerCase();
+                    dictionary.put(word, dictionary.getOrDefault(word, 0) + 1);
+            }
+        }
+        System.out.println(dictionary);
     }
 
 }
