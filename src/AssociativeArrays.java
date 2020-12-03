@@ -49,21 +49,19 @@ public class AssociativeArrays {
         Pattern p = Pattern.compile("[А-Яа-я]+");
         try (Scanner reader = new Scanner(new File(in), StandardCharsets.UTF_8);
              PrintStream writer = new PrintStream(new File(out), StandardCharsets.UTF_8)) {
-            while (reader.hasNext()) {
-                String[] words = reader.nextLine().split("\\s+");
-                for (String word : words) {
-                    Matcher m = p.matcher(word);
-                    StringBuilder sb = new StringBuilder();
-                    while (m.find()) {
-                        m.appendReplacement(sb, transliteration(m.group()));
-                    }
-                    m.appendTail(sb);
-                    writer.print(sb + " ");
+            while (reader.hasNextLine()) {
+                String words = reader.nextLine();
+                Matcher m = p.matcher(words);
+                StringBuilder sb = new StringBuilder();
+                while (m.find()) {
+                    m.appendReplacement(sb, transliteration(m.group()));
                 }
-                writer.append(System.lineSeparator());
+                m.appendTail(sb);
+                writer.println(sb);
             }
         }
     }
+
 
     private static Map<Character, Integer> charCounter(String s) {
         Map<Character, Integer> countSymbol = new HashMap<>();
