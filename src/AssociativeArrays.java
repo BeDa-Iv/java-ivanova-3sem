@@ -52,12 +52,12 @@ public class AssociativeArrays {
             while (reader.hasNextLine()) {
                 String words = reader.nextLine();
                 Matcher m = p.matcher(words);
-                StringBuilder sb = new StringBuilder();
+                StringBuilder output = new StringBuilder();
                 while (m.find()) {
-                    m.appendReplacement(sb, transliteration(m.group()));
+                    m.appendReplacement(output, transliteration(m.group()));
                 }
-                m.appendTail(sb);
-                writer.println(sb);
+                m.appendTail(output);
+                writer.println(output);
             }
         }
     }
