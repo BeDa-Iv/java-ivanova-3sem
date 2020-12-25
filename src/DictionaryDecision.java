@@ -15,8 +15,8 @@ public class DictionaryDecision {
         try (Scanner reader = new Scanner(new File(filename), StandardCharsets.UTF_8)) {
             while (reader.hasNextLine()) {
                 String[] words = reader.nextLine().split(" ", 2);
-                DictionaryEntry newWord = new DictionaryEntry(words[0], words[1]);
-                dict.add(newWord);
+                DictionaryEntry word = new DictionaryEntry(words[0], words[1]);
+                dict.add(word);
             }
         } catch (Exception e) {
             System.out.println("проблема при чтении файла");
